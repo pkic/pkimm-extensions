@@ -1,3 +1,11 @@
+---
+# Not website content. This repository is mounted as Hugo content by pkic.org,
+# so the file needs an explicit exclusion to stay unpublished.
+build:
+  render: never
+  list: never
+---
+
 # PKI MM Extensions
 
 Official catalog of extensions to the [PKI Maturity Model](https://pkic.org/wg/pkimm/model/).
