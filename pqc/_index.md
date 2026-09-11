@@ -12,20 +12,17 @@ The quantum threat fundamentally changes what PKI maturity means. An organizatio
 
 ## Status
 
-This extension is **under development**.
+This extension is **under development**. It is authored and maintained by Kennedy Nwup (Afield AB), Vice Chair of the PKIMM Working Group.
 
-- **Complete** — Governance module (categories 1 – 4): full Level 1–5 criteria, assessor guidance, evidence examples, and overlay weights are defined.
-- **Outline** — Management, Operations, and Resources modules: PQC-critical considerations identified, but Level 1–5 criteria are not yet developed.
-- **YAML version** — `0.2.0`. The extension version will move to `1.0.0` when all modules reach full Level 1–5 development and the working group endorses the content.
+- **Complete** — Governance module (strategy and vision, policies and documentation, compliance, processes and procedures, and cryptography): full Level 1–5 criteria, assessor guidance, evidence examples, overlay weights, and 25 status-labelled regulatory and standards references listed per category for display in the assessment application. Includes persona coverage for software vendors and certificate-consuming organizations (v0.4.0) and reworked segregation-of-duties criteria (v0.3.0).
+- **In development** — Management module: source content complete and under review; YAML conversion in progress. Operations and Resources modules: PQC-critical considerations identified at outline level.
+- **YAML version** — `0.6.0`. The extension version will move to `1.0.0` when all modules reach full Level 1–5 development and the working group endorses the content.
 
-### Open question
+### Overlay design
 
-The placement of overlay weights is **not yet settled** between two candidate designs:
+Earlier drafts treated two overlay designs as competing candidates: Governance-centric overlays, per-requirement multipliers on the Governance categories, and capability-centric overlays on operational capabilities such as crypto-agility and PQC training (section 7 of the v1.3 proposal). Development since then has reconciled them by module rather than choosing between them. The Governance overlays are published in the current YAML. Overlays for the Management module, including change management and agility, are drafted in the Module 2 source content now under review, and training-related overlays will follow with the Resources module. The working group reviews each module's overlays as part of that module's release.
 
-- **Governance-centric overlays** (current YAML): per-requirement multipliers applied to Governance categories 1 – 4, emphasizing the requirements where PQC introduces fundamentally new evidence or review cadence.
-- **Capability-centric overlays** (Kennedy's proposal, section 7): multipliers applied to crypto-agility (Change Management & Agility) and PQC training (Knowledge & Training), elevating the operational capabilities most underweighted for quantum readiness.
-
-The current YAML follows the Governance-centric design (because that is what the self-assessment tool currently exercises). Resolving this is a working-group decision and will land in a future revision.
+The v2.0.0 model's Cryptography category is covered as of extension version 0.6.0, with a relevance entry and overlays on all six requirements.
 
 ## Scope
 
@@ -35,11 +32,11 @@ The extension targets the following audiences:
 - **PKI architects and operators in enterprises** — assessing internal PKI quantum-readiness.
 - **Auditors and consultants** — using the extension as part of broader PKI maturity engagements.
 
-Persona coverage for **certificate-consuming organizations**, **software vendors**, and **AI-system-layer cryptographic governance** is identified as a known gap and tracked for a later revision.
+Persona coverage for **certificate-consuming organizations** and **software vendors** is now included in the Governance criteria (v0.4.0). Coverage for **AI-system-layer cryptographic governance** remains a known gap tracked for a later revision.
 
 ## What the extension covers
 
-The four Governance categories receive full PQC-specific Level 1–5 criteria; the remaining modules are identified at an outline level only.
+The published YAML covers the Governance module in full: strategy and vision, policies and documentation, compliance, and processes and procedures each receive PQC-specific Level 1–5 criteria. The Management module is developed in source form and under review; Operations and Resources are identified at outline level.
 
 ### Governance — Module G
 

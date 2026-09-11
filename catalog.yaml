@@ -2,7 +2,7 @@ catalogVersion: 1.0.0
 extensions:
   - id: pqc
     name: PQC Readiness Extension
-    version: 0.2.0
+    version: 0.6.0
     status: under-development
     compatibility: ["2.0.0"]
     documentation: https://pkic.org/wg/pkimm/extensions/pqc/
