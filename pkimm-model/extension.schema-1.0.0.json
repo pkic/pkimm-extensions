@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "PKI MM Extension schema",
-  "description": "Schema for extensions to the PKI Maturity Model (extensions/catalog/<id>/<id>-extension.yaml). See https://pkic.org/wg/pkimm/model/extensions/ for the framework documentation.",
+  "description": "Schema for extensions to the PKI Maturity Model. Extension definitions live in the pkimm-extensions repository (<id>/<id>-extension.yaml). See https://pkic.org/wg/pkimm/model/extensions/ for the framework documentation and https://pkic.org/wg/pkimm/extensions/ for the catalog.",
   "version": "1.0.0",
   "type": "object",
   "required": ["schemaVersion", "extension", "relevance", "overlays"],
