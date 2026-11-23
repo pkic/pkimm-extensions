@@ -869,7 +869,7 @@ relevance:
         name: Advanced
         description: |
           - Post-quantum and hybrid certificate profiles are defined, including encoding, extensions, and policy identifiers, and the issuing configuration enforces them.
-          - Certificate-validity policy accounts for the algorithm deprecation timeline in NIST IR 8547, so that lifetimes do not outlast algorithm assurance.
+          - Certificate-validity policy accounts for the algorithm deprecation timeline established under Governance (the applicable external deadlines, NIST IR 8547 among them where it applies, or documented risk-based dates), so that lifetimes do not outlast algorithm assurance.
           - A defined approach exists for relying-party validation testing, for enrollment-protocol readiness across the protocols in use, and for revocation behavior under post-quantum signature sizes.
           - Where certificates bind KEM public keys, enrollment procedures define how possession or operational control of the corresponding decapsulation key is evidenced, since a KEM public key cannot by itself serve as the verification key for a request signature; the program is assessed on having an accepted mechanism, not on designing the protocol.
           - A trust-anchor and intermediate transition approach is documented, including cross-signing or parallel hierarchy, distribution, and rollback.
@@ -1012,9 +1012,9 @@ relevance:
         description: |
           - A defined, owned process exists for cryptographic change, covering algorithm and certificate-profile substitution, with rollback criteria.
           - A dependency map identifies the sequence in which certificate authority, hardware module, middleware, endpoints, trust stores, monitoring, and external relying parties must change.
-          - Migration is planned as sequenced waves aligned to the deprecation timeline in NIST IR 8547, not as a single cutover.
+          - Migration is planned as sequenced waves aligned to the deprecation timeline established under Governance (the applicable external deadlines, NIST IR 8547 among them where it applies, or documented risk-based dates), not as a single cutover.
           - An emergency cryptographic-change procedure is documented for algorithm or implementation withdrawal.
-          - Where hybrid is used, a defined exit path to pure post-quantum is documented; procurement and contractual mechanisms for third-party dependencies are identified.
+          - Where hybrid is used and the jurisdiction and ecosystem permit a transition to pure post-quantum, a defined exit path is documented; procurement and contractual mechanisms for third-party dependencies are identified.
       - number: 4
         name: Managed
         description: |
@@ -1156,6 +1156,7 @@ relevance:
           - The demonstration includes a real or deliberately induced incorrect or failed outcome and shows that the condition is detected, the failure impact is contained or otherwise handled according to the defined controls, and the exception or incident path is followed.
           - Retained evidence records the automation configuration, target population, expected certificate/cryptographic outcome, observed result, monitoring evidence, exception handling, remediation, and retest status.
           - The level does not require automation of processes for which the scoped assessment shows deliberate manual operation is the appropriate control.
+          - Where every material certificate lifecycle process in scope is deliberately manual, the criteria above have no automated operation to apply to. The level is then met when each manual-operation decision recorded at Level 3 has been reviewed against the Level 3 change triggers by someone other than its author and confirmed or changed, with the review retained.
       - number: 5
         name: Optimized
         description: |
@@ -1163,6 +1164,7 @@ relevance:
           - Guardrails and target populations are maintained as profiles, standards, providers, and supported client populations change.
           - Failure and exception paths are periodically proven or re-evidenced after material change, and recurring exceptions drive process or migration improvement.
           - Automation remains deliberately bounded: the highest maturity level does not remove human approval or manual operation where those controls are required for assurance.
+          - Where every material certificate lifecycle process in scope is deliberately manual, the level is met when the Level 4 review of the manual-operation decisions is routine: repeated on each change trigger and at a defined interval, with the outcomes recorded.
     - id: interoperability
       weight: 10
       guidance: |
