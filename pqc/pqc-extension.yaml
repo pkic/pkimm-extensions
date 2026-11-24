@@ -15,6 +15,12 @@
 #            category and Management keeps 5, 5, 4 and 5.
 #            The relevance-weight rule is set once across the extension
 #            when the Resources module is added.
+#            Management criteria and the Operations Automation
+#            criteria for manual operation carry clarifications from
+#            pull request review (internal-only PKI, managed services,
+#            jurisdiction, stateful hash-based signing, manual-only
+#            lifecycles); these go back into the Module 2 and Module 3
+#            source documents.
 # 0.7.0  - DRAFT FOR REVIEW. Added Management relevance (Key
 #            Management, Certificate Management, Infrastructure
 #            Management, Change Management and Agility) and eight
@@ -747,7 +753,9 @@ relevance:
           - Key-encapsulation mechanisms are not signature schemes. ML-KEM introduces decapsulation behavior, the distinction between static and ephemeral key use, and implementation-misuse risks that differ from RSA or elliptic-curve key establishment. SP 800-227, final since September 2025, provides the current recommendations for implementing and using such mechanisms, and a mature program follows it rather than treating a KEM as a generic new key type.
           - Post-quantum private keys have more than one valid representation. For ML-KEM and ML-DSA, the NIST guidance current as of June 2026 confirms that a key-generation seed is an acceptable alternative format for a key pair or private key, and that a seed generated in one cryptographic module may be imported into or exported from another. This creates a genuine management concern around seed handling, metadata, protection equivalence between seed and expanded forms, and consistency checking. It is a concrete operational matter, not a question of entropy supply.
           - Hardware-module capability is rarely uniform. A statement that a module supports post-quantum algorithms is not assessable; what matters is the firmware version, the specific mechanisms and parameter sets supported, the validation or vendor-affirmation status, the behavior of backup, restore, and clustering, the available interfaces, and the throughput observed under representative signing or issuance load. The dominant cost in post-quantum key generation and signing is compute and interface latency under load, not randomness supply, and capacity evidence should be sought in those terms.
-          - Stateful hash-based signatures are a high-severity hazard for the programs that use them. Under SP 800-208, the key-generation and signing operations of LMS and XMSS must be performed within hardware cryptographic modules validated to FIPS 140-2 or FIPS 140-3 Level 3 or higher physical security, private keying material must not be exportable, and the signing state must be advanced in non-volatile storage before a signature is released; reuse of a one-time key, for example through a counter reset or an uncoordinated restore, is catastrophic and unrecoverable. Because NIST states that these schemes are not intended for general use, the criteria addressing this hazard apply only where firmware, secure-boot, product, or other long-lived signing places LMS or XMSS in scope; applicability is determined at the scoping stage.
+          - Stateful hash-based signatures are a high-severity hazard for the programs that use them. Under SP 800-208, the key-generation and signing operations of LMS and XMSS must be performed within hardware cryptographic modules validated to FIPS 140-2 or FIPS 140-3 Level 3 or higher physical security, private keying material must not be exportable, and the signing state must be advanced in non-volatile storage before a signature is released or another signing request is accepted; reuse of a one-time key, for example through a counter reset or an uncoordinated restore, is catastrophic and unrecoverable. Because NIST states that these schemes are not intended for general use, the criteria addressing this hazard apply only where firmware, secure-boot, product, or other long-lived signing places LMS or XMSS in scope; applicability is determined at the scoping stage.
+
+        Where key material is generated in, imported into, or held in a cloud or managed service whose module is operated by the provider, the module-level evidence named in the criteria, such as firmware version, ceremony records, and backup, restore, and clustering behavior, is not the program's to produce. The equivalent evidence is the provider's attested algorithm-support and validation position for the service in use, the program's own configuration of and test results against the service, and its shared-responsibility record, as set out under Infrastructure Management; the reliance is recorded as a dependency and a residual risk. The equivalence changes who produces the evidence, not what the evidence must establish, and operations the program itself controls are evidenced directly.
       assessment: |
         Key Probes:
           - Can the program produce a key-generation record showing post-quantum key material generated within an approved module, under ceremony control, with correct algorithm and parameter metadata?
@@ -761,7 +769,7 @@ relevance:
           - A key inventory that records key existence but not algorithm, parameter set, use, and migration state. Such an inventory cannot drive a migration.
           - An assertion that the hardware module supports post-quantum algorithms, with no firmware version, mechanism list, validation status, or load evidence behind it.
           - Acceptance of post-quantum seed-format keys without a defined position on protection equivalence and consistency checking.
-          - Any reliance on stateful hash-based signing without demonstrated single-writer state control and recovery design.
+          - Any reliance on stateful hash-based signing without demonstrated one-time-key reuse prevention and recovery design.
           - Framing key-generation capacity as an entropy problem, which misdescribes the actual compute-and-latency constraint.
 
         Scope check for stateful hash-based signing: before the related clauses are set aside, check firmware, secure-boot, product, and code-signing pipelines, continuous-integration signing services, the hardware-module key inventory, and release-engineering and timestamping workflows. A conditional clause may be set aside only where the applicability matrix records the basis; the clause is then not treated as unmet. Where scope is unresolved, the clauses are assessed as applicable.
@@ -795,21 +803,24 @@ relevance:
           - Key-generation procedures for post-quantum algorithms are documented, including module selection, ceremony controls, metadata capture, and the handling of seed and expanded key formats with a defined position on consistency checking.
           - Where key-encapsulation mechanisms or KEM certificates are in scope, the program has a defined position on the role of each KEM key as static, semi-static, or ephemeral, on decapsulation-key lifetime, rotation, and protection, and on how possession or control of the decapsulation key is evidenced during enrollment or issuance, consistent with SP 800-227. The module assesses that such a position exists and is applied, not the protocol design itself.
           - For each post-quantum-relevant module, firmware version, supported mechanisms, and validation or vendor-affirmation status are recorded, and a position on residual risk is documented in keeping with the boundary of assurance.
-          - Where stateful hash-based signing is in scope, state persistence, single-writer enforcement, non-exportable hardware handling, recovery design, and one-time-key exhaustion monitoring are documented per SP 800-208.
+          - Where stateful hash-based signing is in scope, state persistence, prevention of one-time-key reuse across concurrent signing and recovery, hardware-module protection, recovery design, and one-time-key exhaustion monitoring are documented. Where SP 800-208 applies, the documentation shows conformance to its module requirements, including non-exportability of private keying material; where a different requirement applies, it is identified and the controls are documented against it.
+          - Where key material is generated in, imported into, or held in a provider-operated service, the inventory, key-generation, and module attributes that the provider controls are recorded from the provider's published or attested position for the service and configuration in use, together with the program's own configuration of the service; the reliance is recorded as a dependency and a residual risk.
       - number: 4
         name: Managed
         description: |
           - Post-quantum key generation has been performed and evidenced: ceremony records show approved-module generation with correct metadata, and seed handling, where used, has been exercised including a consistency check on import.
-          - Module post-quantum capability has been confirmed by test, not by assertion, including measured throughput under representative signing or issuance load and observed backup, restore, and clustering behavior.
+          - Module post-quantum capability has been confirmed by test, not by assertion, including measured throughput under representative signing or issuance load and the observed behavior of the backup, restore, and clustering mechanisms the deployment uses.
           - The key inventory is maintained against change and reconciled periodically with discovery output; migration state is current.
-          - Where stateful hash-based signing is in scope, state control has been demonstrated across a failover and a restore without one-time-key reuse, with the test retained as evidence.
+          - Where stateful hash-based signing is in scope, state control has been demonstrated across each failover and recovery path the architecture provides without one-time-key reuse, with the test retained as evidence.
+          - Where key material is generated in, imported into, or held in a provider-operated service, the generation and module evidence above is met, for the operations the provider controls, through the provider's attested position for the service in use, the program's own configuration, and the program's test results against the service, including throughput under representative load. Operations the program controls, including seed import and its consistency check where used, are demonstrated directly. Where stateful hash-based signing is provider-operated, the provider's assurance is specific to state persistence, reuse prevention, exhaustion, and recovery for the service in use; an attestation of algorithm support alone does not meet the criterion. Limitations are recorded.
       - number: 5
         name: Optimized
         description: |
           - Post-quantum key lifecycle is operated as routine controlled practice: generation, protection, rotation, and retirement are evidenced, and module capability and load headroom are monitored rather than assumed.
           - Seed and expanded key formats are handled under a settled policy with automated consistency enforcement where keys are imported.
           - The key inventory is continuously reconciled with discovery and migration tracking, and supports reporting on migration progress by algorithm and security category.
-          - Where stateful hash-based signing is in scope, state control is continuously monitored with exhaustion thresholds and tested recovery; it is deliberately not fully automated, because safe state management depends on controlled, audited operation.
+          - Where stateful hash-based signing is in scope, one-time-key reuse prevention is enforced by the cryptographic module, which persists the advanced signing state before a signature is released or another signing request is accepted, and state is continuously monitored with exhaustion thresholds and tested recovery. Key-generation ceremonies, the distribution of signing capacity across modules where used, and recovery remain under approved, audited control, and no recovery path returns a key to an earlier signing state.
+          - Where key material is generated in, imported into, or held in a provider-operated service, lifecycle operation is evidenced through service operation records and the provider's maintained assurance, and capacity and headroom through the service's own measures, such as telemetry, quotas, rate limits, or contractual capacity limits, rather than direct module instrumentation. Where stateful hash-based signing is provider-operated, that assurance remains specific to state persistence, reuse prevention, exhaustion, and recovery.
     - id: certificate-management
       weight: 5
       guidance: |
@@ -829,8 +840,8 @@ relevance:
         Key Probes:
           - Has the program validated that representative relying parties can build and verify post-quantum or hybrid chains, including behavior on unknown extensions and chain selection?
           - Does certificate-validity policy account for the deprecation trajectory of classical algorithms, so that certificate lifetimes do not outlast the assurance of the algorithms that sign them?
-          - Have revocation services been tested under post-quantum signature sizes, including response size, responder throughput, and client parsing?
-          - Which enrollment protocols and integrations have been confirmed to accept post-quantum and hybrid certificate structures?
+          - Where revocation objects are signed with post-quantum algorithms, have revocation services been tested under those signature sizes, including response size, responder throughput, and client parsing?
+          - Which enrollment protocols and integrations have been confirmed to accept post-quantum and, where used, hybrid certificate structures?
           - Has a trust-anchor or intermediate rollover for post-quantum been rehearsed, including distribution, chain building, and rollback?
           - Where certificates bind KEM public keys, what proof-of-possession or decapsulation-control mechanism is used during enrollment, given that a KEM public key cannot by itself serve as the verification key for a certificate-request signature in the way a signing key can?
           - Where long-lived signatures are in scope, is there a tested approach to keeping them verifiable as classical algorithms are deprecated?
@@ -868,23 +879,23 @@ relevance:
       - number: 3
         name: Advanced
         description: |
-          - Post-quantum and hybrid certificate profiles are defined, including encoding, extensions, and policy identifiers, and the issuing configuration enforces them.
+          - Post-quantum certificate profiles and, where hybrid is used, hybrid profiles are defined, including encoding, extensions, and policy identifiers, and the issuing configuration enforces them.
           - Certificate-validity policy accounts for the algorithm deprecation timeline established under Governance (the applicable external deadlines, NIST IR 8547 among them where it applies, or documented risk-based dates), so that lifetimes do not outlast algorithm assurance.
-          - A defined approach exists for relying-party validation testing, for enrollment-protocol readiness across the protocols in use, and for revocation behavior under post-quantum signature sizes.
+          - A defined approach exists for relying-party validation testing, for enrollment-protocol readiness across the protocols in use, and, where revocation objects are intended to be signed with post-quantum algorithms, for revocation behavior under those signature sizes.
           - Where certificates bind KEM public keys, enrollment procedures define how possession or operational control of the corresponding decapsulation key is evidenced, since a KEM public key cannot by itself serve as the verification key for a request signature; the program is assessed on having an accepted mechanism, not on designing the protocol.
-          - A trust-anchor and intermediate transition approach is documented, including cross-signing or parallel hierarchy, distribution, and rollback.
+          - A trust-anchor and intermediate transition approach is documented, including the transition mechanism, such as cross-signing or a parallel hierarchy, distribution, and rollback.
           - Where long-lived signatures are in scope, an approach to sustained verifiability is documented.
       - number: 4
         name: Managed
         description: |
           - Relying-party validation of post-quantum or hybrid chains has been demonstrated against a representative population, with results, including unknown-extension and chain-selection behavior, retained as evidence.
-          - Enrollment paths in use have been confirmed to accept post-quantum structures, and revocation services have been measured under post-quantum signature sizes.
+          - Enrollment paths in use have been confirmed to accept post-quantum structures, and, where revocation objects are signed with post-quantum algorithms, revocation services have been measured under those signature sizes.
           - A trust-anchor or intermediate rollover has been rehearsed in a representative environment, including rollback.
           - Where long-lived signatures are in scope, sustained verifiability has been demonstrated for at least one representative case.
       - number: 5
         name: Optimized
         description: |
-          - Relying-party validation, enrollment-path readiness, and revocation performance for post-quantum are monitored as operational properties rather than confirmed once.
+          - Post-quantum relying-party validation, enrollment-path readiness, and, where revocation objects are signed with post-quantum algorithms, revocation performance are monitored as operational properties rather than confirmed once.
           - Certificate-profile and validity policy is maintained against the evolving deprecation trajectory, and issuance is constrained accordingly.
           - Trust-anchor and intermediate transition is a rehearsed, controlled capability with tested rollback; it is not automated where assurance depends on controlled ceremony.
           - Where long-lived signatures are in scope, sustained verifiability is operated and monitored.
@@ -900,13 +911,13 @@ relevance:
           - Post-quantum can fail silently into classical operation. Where negotiation, chain selection, or client compatibility is misconfigured, a system may fall back to classical cryptography without alerting, which defeats the purpose of the migration while appearing to succeed. Telemetry showing the negotiated mechanisms and the rate and reason of fallback is therefore an infrastructure requirement, not a refinement.
           - Representative testing is essential and easily faked. A laboratory with one modern client and one test module proves little; evidence at the higher levels should reflect representative clients, legacy endpoints, mobile and embedded systems, proxies, mutual authentication, and degraded network conditions.
           - Much infrastructure is not owned, and for a large share of programs the managed-service case is the primary case rather than an exception. Many programs depend on cloud key-management and module services, managed private certificate authorities, content-delivery transport, and vendor-controlled trust stores, and for these the firmware, clustering, and replication evidence that an owning operator would produce is simply not theirs to produce. The criteria are written to be scored cleanly by such a program: its management maturity is evidenced by the attested post-quantum readiness of the services it consumes, by its own configuration of those services, by its management of the shared-responsibility boundary when an algorithm is deprecated, and by its contractual position, rather than by hardware evidence it does not hold. The criteria deliberately avoid naming particular providers or provider-specific mechanisms, so that they remain scorable and durable across deployment models. Because a managed-service program evidences readiness partly through provider attestation rather than direct control, that reliance is itself recorded as a dependency and a residual risk, so that the trade-off between consuming a service and controlling it is visible in the assessment rather than hidden by it.
-          - Hardware-module firmware and lifecycle frequently gate readiness. Whether the vendor has shipped validated firmware, whether the algorithms are supported within the validated boundary, and whether policy can be updated without revalidation collapse are often the determining factors, and they belong in infrastructure as scored criteria rather than as narrative.
+          - Hardware-module firmware and lifecycle frequently gate readiness. Whether the vendor has shipped validated firmware, whether the algorithms are supported within the validated boundary, and whether policy can be updated without revalidation collapse are often the determining factors, and they belong in infrastructure as scored criteria rather than as narrative. In this category, validated means validated or certified under the scheme that applies to the assessed environment, such as FIPS 140-3 or Common Criteria. The program identifies the scheme, the evaluated configuration, and the cryptographic claims it covers; one scheme is not presumed equivalent to another.
 
         Physical security is not weighted under post-quantum conditions, because its control set does not change in nature during a migration. Where a hardware refresh occurs, the custody of new modules, secure transport, swap windows, and access-logged replacement may be captured as supporting evidence under module migration execution, but this is treated as ordinary change and capacity management, not as a post-quantum maturity overlay.
       assessment: |
         Key Probes:
           - Which infrastructure components in the cryptographic path have been confirmed to support the intended post-quantum modes, and which set the migration pace?
-          - Has the program measured the latency, size, fragmentation, and capacity effects of post-quantum objects under representative load?
+          - Has the program measured the effects of post-quantum objects relevant to its protocols and network paths, such as latency, size, fragmentation, and capacity, under representative load?
           - Is there telemetry showing negotiated post-quantum mechanisms and the rate and reason of fallback to classical operation?
           - Where infrastructure is provided by cloud or managed services, what is the evidenced post-quantum readiness and contractual position of those services?
           - For each hardware-module dependency, is validated firmware available, are the algorithms within the validated boundary, and can policy be updated without revalidation collapse?
@@ -918,7 +929,7 @@ relevance:
           - An owned-infrastructure assumption in a program that in fact depends on cloud or managed services.
           - Hardware-module readiness asserted from a vendor roadmap rather than validated firmware.
 
-        Required evidence for fallback and downgrade telemetry (Levels 4 and 5). The telemetry records, per connection or transaction class: the negotiated mechanism; the certificate, profile, and chain used; whether a fallback event occurred and its reason; the client or service class involved; the rate and trend of fallback; the exception owner where fallback is expected; and the action taken where it is not. Telemetry that reports success or failure without distinguishing genuine post-quantum operation from silent classical fallback does not satisfy the requirement.
+        Required evidence for fallback and downgrade telemetry (Levels 4 and 5). The telemetry records, per connection or transaction class: the negotiated mechanism; the certificate, profile, and chain used; whether a fallback event occurred and its reason; the client or service class involved; the rate and trend of fallback; the exception owner where fallback is expected; and the action taken where it is not. The record may draw on the program's own instrumentation or on provider-supplied logs. Telemetry that reports success or failure without distinguishing genuine post-quantum operation from silent classical fallback does not satisfy the requirement.
       references:
       - nist-fips-203
       - nist-fips-204
@@ -942,16 +953,16 @@ relevance:
         name: Advanced
         description: |
           - The infrastructure components in the cryptographic path are documented, with their post-quantum support status and the components that pace migration identified.
-          - A defined approach exists for measuring the latency, size, fragmentation, and capacity effects of post-quantum objects under representative load.
+          - A defined approach exists for measuring the effects of post-quantum objects relevant to the deployed protocols and network paths, such as latency, size, fragmentation, and capacity, under representative load.
           - Telemetry requirements for negotiated mechanisms and for fallback rate and reason are defined.
           - For each hardware-module dependency, firmware, validated-boundary algorithm support, and revalidation implications are recorded; for cloud or managed dependencies, the readiness and contractual position are documented.
-          - Module custody and replacement procedures for any hardware refresh are documented as supporting evidence.
+          - Where a hardware refresh is part of the migration, module custody and replacement procedures are documented as supporting evidence.
       - number: 4
         name: Managed
         description: |
-          - Capacity and performance effects have been measured under representative load, with results retained, covering tail latency, fragmentation, and module throughput. Where infrastructure is consumed as a managed service and direct module measurement is not available to the program, the equivalent evidence is the provider's published capacity and algorithm-support position, the program's monitoring of service quotas and rate-limit behavior, and its shared-responsibility mapping for the deprecation event.
+          - Capacity and performance effects have been measured under representative load, with results retained, covering the effects relevant to the deployed protocols and network paths, such as tail latency, packetization or fragmentation, and module throughput. Where infrastructure is consumed as a managed service and direct module measurement is not available to the program, the equivalent evidence is the provider's published capacity and algorithm-support position, the program's monitoring of service quotas and rate-limit behavior, and its shared-responsibility mapping for the deprecation event.
           - Fallback telemetry is in place and has surfaced, or demonstrably would surface, silent reversion to classical operation.
-          - Representative testing has covered legacy, mobile, embedded, proxied, mutually authenticated, and degraded-network cases rather than a single modern path.
+          - Representative testing has covered the client and network-path classes present in the assessed population, such as legacy, mobile, embedded, proxied, mutually authenticated, and degraded-network cases, rather than a single modern path; classes not present in the population are recorded with the basis for their exclusion.
           - Hardware-module post-quantum capability has been confirmed by test within the validated boundary; cloud or managed dependencies have evidenced readiness.
       - number: 5
         name: Optimized
@@ -962,32 +973,32 @@ relevance:
     - id: change-management-and-agility
       weight: 5
       guidance: |
-        Change Management and Agility is where a quantum-safe transition is shown to be executable rather than merely intended, and it is the category most central to the extension's purpose. The Governance module establishes which algorithms are approved and who may approve cryptographic change; this category assesses whether the organization can carry an algorithm or certificate-profile change through to production safely, observe it, and reverse it, across the systems that depend on the cryptography, including those it does not directly control.
+        Change Management and Agility is where a quantum-safe transition is shown to be executable rather than merely intended, and it is the category most central to the extension's purpose. The Governance module establishes which algorithms are approved and who may approve cryptographic change; this category assesses whether the organization can carry an algorithm or certificate-profile change through to production safely, observe it, and reverse it or recover to an approved state, across the systems that depend on the cryptography, including those it does not directly control.
         Cryptographic agility in the post-quantum context is not the ability to change quickly. It is the ability to change in a controlled, sequenced, and reversible way. The standardization landscape makes this concrete: the signature and key-establishment portfolio is still expanding, with ML-KEM, ML-DSA, and SLH-DSA final, HQC selected as a code-based key-encapsulation backup on a different mathematical basis, and a further lattice signature in standardization; an agile organization must be able to adopt a newly standardized or replacement algorithm without re-architecting. NIST CSWP 39upd1 frames agility as the governing capability for exactly this kind of transition, and the deprecation timeline in NIST IR 8547 makes the transition a sequencing problem rather than a single event.
-        The assessable object in this category is a rehearsed change, not a policy. A change that has been staged, measured, and reversed in a representative environment is evidence of agility; a documented intention to be agile is not.
+        The assessable object in this category is a rehearsed change, not a policy. A change that has been staged, measured, and reversed or recovered to an approved state in a representative environment is evidence of agility; a documented intention to be agile is not.
 
         Operational hazards specific to PQC:
-          - Migration is not a single change but a sequenced one. Certificate authority, hardware module, middleware, endpoints, trust stores, monitoring, and external relying parties must change in an order that a dependency map makes explicit; a single undifferentiated roadmap is not a plan.
+          - Migration is not a single change but a sequenced one. The affected components present in the assessed architecture, such as certificate authority, hardware module or managed key service, middleware, endpoints, trust stores, monitoring, and relying parties (external relying parties included where they are in scope), must change in an order that a dependency map makes explicit; a single undifferentiated roadmap is not a plan.
           - Algorithms may have to be withdrawn under pressure. If a deployed post-quantum algorithm, implementation, or module firmware is weakened, the organization must be able to substitute it without breaking authentication, and this emergency path is distinct from routine change management.
           - Rollback can silently re-enable a deprecated algorithm. A reversion that restores a classical algorithm through configuration drift defeats the migration while appearing to restore service; negative testing for downgrade and drift is therefore part of agility, not separate from it.
           - Hybrid can become permanent debt. A hybrid deployment with no tested exit path to pure post-quantum accumulates size, validation complexity, and downgrade surface indefinitely; agility includes the ability to remove the classical component where the jurisdiction and ecosystem permit.
           - Much of the estate is not under direct control. Third-party software, appliances, and managed services dictate large parts of a migration, and agility must extend to procurement and contractual mechanisms, not only to systems the organization operates.
       assessment: |
         Key Probes:
-          - Has the organization executed a representative cryptographic change, including rollback, in an environment resembling production?
-          - Is there a dependency map showing the order in which certificate authority, hardware module, middleware, endpoints, trust stores, monitoring, and external relying parties must change?
+          - Has the organization executed a representative cryptographic change, including rollback or recovery to an approved state, in an environment resembling production?
+          - Is there a dependency map showing the order in which the affected components present in the assessed architecture, such as certificate authority, hardware module or managed key service, middleware, endpoints, trust stores, monitoring, and relying parties (external relying parties included where they are in scope), must change?
           - How would the organization respond if a deployed post-quantum algorithm or implementation were weakened, and is that response rehearsed?
           - For systems that cannot migrate on time, who owns the exception, what compensating control applies, and when does it expire?
-          - Where hybrid is deployed, is there a defined and tested path to remove the classical component?
+          - Where hybrid is deployed, is there a defined and tested path to remove the classical component where the jurisdiction and ecosystem permit, or otherwise a recorded constraint with an owner and a review trigger?
 
         Warning Signs:
           - An assertion of rapid change capability with no record of an exercised change; speed is not agility.
           - A single migration roadmap with no cross-system dependency sequencing.
           - No emergency procedure for an algorithm or firmware withdrawal, only routine change management.
-          - Hybrid treated as a finished state with no exit plan.
+          - Hybrid treated as a finished state with no exit plan and no recorded constraint or review trigger.
           - Rollback that re-enables a deprecated classical algorithm through configuration drift.
 
-        Required evidence for the rehearsed cryptographic change (Levels 4 and 5). The demonstration is evidenced by a fixed package: a change record; the dependency map used; the rollout plan and the rollback plan; the telemetry captured during the change; the downgrade-negative test confirming no deprecated classical algorithm was re-enabled; the observed result against the expected result; the exception register; and the residual-risk acceptance. At least one element of the input population is drawn from the governed high-priority exposure set.
+        Required evidence for the rehearsed cryptographic change (Levels 4 and 5). The demonstration is evidenced by a fixed package: a change record; the dependency map used; the rollout plan and the rollback or recovery plan; the telemetry captured during the change; the downgrade-negative test confirming no deprecated classical algorithm was re-enabled; the observed result against the expected result; the exception register; and the residual-risk acceptance. At least one element of the input population is drawn from the governed high-priority exposure set.
       references:
       - nist-cswp-39
       - nist-ir-8547
@@ -1010,25 +1021,25 @@ relevance:
       - number: 3
         name: Advanced
         description: |
-          - A defined, owned process exists for cryptographic change, covering algorithm and certificate-profile substitution, with rollback criteria.
-          - A dependency map identifies the sequence in which certificate authority, hardware module, middleware, endpoints, trust stores, monitoring, and external relying parties must change.
+          - A defined, owned process exists for cryptographic change, covering algorithm and certificate-profile substitution, with rollback or recovery criteria.
+          - A dependency map identifies the sequence in which the affected components present in the assessed architecture, such as certificate authority, hardware module or managed key service, middleware, endpoints, trust stores, monitoring, and relying parties (external relying parties included where they are in scope), must change.
           - Migration is planned as sequenced waves aligned to the deprecation timeline established under Governance (the applicable external deadlines, NIST IR 8547 among them where it applies, or documented risk-based dates), not as a single cutover.
           - An emergency cryptographic-change procedure is documented for algorithm or implementation withdrawal.
-          - Where hybrid is used and the jurisdiction and ecosystem permit a transition to pure post-quantum, a defined exit path is documented; procurement and contractual mechanisms for third-party dependencies are identified.
+          - Where hybrid is used, the conditions for retiring the classical component are documented: a defined exit path where the jurisdiction and ecosystem permit a transition to pure post-quantum, and otherwise the constraint that prevents it, its owner, and the trigger for review. Procurement and contractual mechanisms for third-party dependencies are identified.
       - number: 4
         name: Managed
         description: |
-          - A representative cryptographic change has been executed end to end in an environment resembling production, including staged rollout, telemetry, and successful rollback, with results retained.
-          - The rollback has been verified not to re-enable any deprecated classical algorithm; negative testing for downgrade and configuration drift is part of the exercise.
+          - A representative cryptographic change has been executed end to end in an environment resembling production, including staged rollout, telemetry, and successful rollback or recovery to an approved state, with results retained.
+          - The rollback or recovery has been verified not to re-enable any deprecated classical algorithm; negative testing for downgrade and configuration drift is part of the exercise.
           - Migration exceptions for systems that cannot move on time are tracked with named owners, compensating controls, and expiry dates.
-          - Dependency sequencing has been tested against at least one external relying-party population, and the emergency procedure has been exercised at least once. The demonstrated change includes at least one service or certificate population drawn from the governed high-priority exposure set, so that maturity is not achieved through low-risk systems alone.
+          - Dependency sequencing has been tested against at least one external relying-party population where external relying parties are in scope; where the assessed PKI serves internal relying parties only, a representative internal relying-party population is tested instead and the basis for excluding external parties is recorded. The emergency procedure has been exercised at least once. The demonstrated change includes at least one service or certificate population drawn from the governed high-priority exposure set, so that maturity is not achieved through low-risk systems alone.
       - number: 5
         name: Optimized
         description: |
           - Cryptographic change is a controlled, routinely exercised capability with measured time-to-change and blast radius, integrated into normal change governance rather than run as a special project.
           - The organization can adopt a newly standardized and governance-approved replacement algorithm through its existing process, demonstrated by rehearsal or prior controlled substitution. For algorithms that are selected or in standardization but not yet published and approved for the assessed environment, the expected capability is rehearsal and dependency analysis, not production deployment.
-          - Migration exceptions trend toward closure on a tracked schedule, and hybrid deployments have a tested, exercised path to pure post-quantum where the jurisdiction and ecosystem permit.
-          - Emergency cryptographic response is proven through periodic exercises, with downgrade resistance continuously monitored, and the evidence base, change records, rollback proofs, exception registers, and exercise reports, is auditable. Migration progress is reported by exposure class, not only by algorithm or migration state, so that coverage of the most exposed assets is visible.
+          - Migration exceptions trend toward closure on a tracked schedule, and hybrid deployments have a tested, exercised path to pure post-quantum where the jurisdiction and ecosystem permit, with recorded constraints reviewed on their triggers otherwise.
+          - Emergency cryptographic response is proven through periodic exercises, with downgrade resistance continuously monitored, and the evidence base, change records, rollback or recovery proofs, exception registers, and exercise reports, is auditable. Migration progress is reported by exposure class, not only by algorithm or migration state, so that coverage of the most exposed assets is visible.
   # Operations (Module 3, Working Draft 0.4). Relevance weights set to each category's
   # post-overlay requirement weight sum, rounded to an integer (30.5 becomes 31); PROVISIONAL.
   - id: O
@@ -1103,7 +1114,7 @@ relevance:
       weight: 5
       guidance: |
         The base PKIMM Automation category is explicitly about certificate lifecycle automation. This extension keeps that boundary. PQC increases the value and scale of controlled automation, but it does not make automation an end in itself. Deliberate manual operation of offline or high-assurance processes can be fully appropriate.
-        Automated cryptographic inventory discovery and CI/CD cryptographic validation are useful PQC practices, but they are not scored here merely because they are automated. Discovery belongs to cryptographic visibility, inventory, and monitoring; CI/CD cryptographic validation is an enabling development/change-management practice. The Automation category scores automated certificate lifecycle processes.
+        Automated cryptographic inventory discovery and CI/CD cryptographic validation are useful PQC practices, but they are not scored here merely because they are automated. Discovery belongs to cryptographic visibility, inventory, and monitoring; CI/CD cryptographic validation is an enabling development/change-management practice. The Automation category scores certificate lifecycle processes: those that are automated and, where manual operation is the deliberate control, the decision to keep them manual and its demonstrated outcome.
 
         Operational hazards specific to PQC:
           - Automated issuance, renewal, replacement, or deployment tooling may not understand the required PQC or transitional certificate profile, algorithm identifier, key type, object size, or target population.
@@ -1155,8 +1166,8 @@ relevance:
           - A representative set of automated PQC certificate lifecycle operations covering the material automation patterns or classes has been demonstrated in a production-like environment, with any exclusions justified.
           - The demonstration includes a real or deliberately induced incorrect or failed outcome and shows that the condition is detected, the failure impact is contained or otherwise handled according to the defined controls, and the exception or incident path is followed.
           - Retained evidence records the automation configuration, target population, expected certificate/cryptographic outcome, observed result, monitoring evidence, exception handling, remediation, and retest status.
-          - The level does not require automation of processes for which the scoped assessment shows deliberate manual operation is the appropriate control.
-          - Where every material certificate lifecycle process in scope is deliberately manual, the criteria above have no automated operation to apply to. The level is then met when each manual-operation decision recorded at Level 3 has been reviewed against the Level 3 change triggers by someone other than its author and confirmed or changed, with the review retained.
+          - The level does not require automation of processes for which the scoped assessment shows deliberate manual operation is the appropriate control. For each material process that is deliberately manual, the manual-operation decision recorded at Level 3 has been reviewed against the Level 3 change triggers by someone other than its author and confirmed or changed, and a representative manual operation has been demonstrated to achieve the expected outcome within the part of the lifecycle the process controls. The demonstration includes a real or deliberately induced incorrect or failed outcome and shows that the condition is detected, its impact is contained or otherwise handled according to the defined controls, and the exception or incident path is followed. Retained evidence records the review, the expected and observed outcome, exception handling, remediation, and retest status; evidence from Management-module rehearsals may be reused where it proves these claims.
+          - Where every material certificate lifecycle process in scope is deliberately manual, the first three criteria have no automated operation to apply to, and the level is met through the preceding criterion.
       - number: 5
         name: Optimized
         description: |
@@ -1164,7 +1175,7 @@ relevance:
           - Guardrails and target populations are maintained as profiles, standards, providers, and supported client populations change.
           - Failure and exception paths are periodically proven or re-evidenced after material change, and recurring exceptions drive process or migration improvement.
           - Automation remains deliberately bounded: the highest maturity level does not remove human approval or manual operation where those controls are required for assurance.
-          - Where every material certificate lifecycle process in scope is deliberately manual, the level is met when the Level 4 review of the manual-operation decisions is routine: repeated on each change trigger and at a defined interval, with the outcomes recorded.
+          - For deliberately manual processes, the Level 4 review and demonstration are routine: the manual-operation decision is reviewed on each change trigger and at a defined interval, the manual outcome and its exception path are re-evidenced after material change or on a justified cadence where such change is infrequent, and recurring exceptions drive process or migration improvement, with the outcomes recorded. Where every material certificate lifecycle process in scope is deliberately manual, the level is met through this criterion.
     - id: interoperability
       weight: 10
       guidance: |
