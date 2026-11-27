@@ -1,6 +1,31 @@
 # =====================================================================
 # PQC Readiness Extension - Change Log
 # ---------------------------------------------------------------------
+# 0.9.0  - DRAFT FOR REVIEW. Added Resources relevance (Sourcing,
+#            Knowledge and Training, Awareness) and one requirement
+#            overlay (resource-availability 1.5) from the Module 4
+#            source document (Working Draft 0.2, November 2026), now
+#            in Working Group review. No overlay is proposed on the
+#            Knowledge and Training or Awareness requirements.
+#            Relevance weights: Resources and Management follow the
+#            proposed parity rule, under which a category's relevance
+#            weight equals its post-overlay requirement weight sum,
+#            rounded half up. Resources: 17, 9 and 7. Management: 13,
+#            25, 17 and 20 (previously 5, 5, 4 and 5; the second from
+#            a sum of 24.5). Operations already follows the rule.
+#            Governance keeps 5 per category until the final
+#            consistency pass before 1.0.0, when the published
+#            Governance weights and overlays are reviewed together.
+#            check_extensions enforces the rule, with Governance
+#            exempt until then. All of this remains PROVISIONAL until
+#            the Working Group confirms it.
+#            References added: nist-sp-1326, nist-sp-800-161,
+#            uk-ncsc-pqc-workshop-report, uk-ncsc-acsc-pqc-pilot,
+#            eu-nis-cg-pqc-roadmap, eu-dora-2022-2554,
+#            eu-dora-rts-2024-1774, europol-qsff-pqc-report,
+#            cabf-smc013-pqc-smime, pkic-pqcmm.
+#            No changes to Governance or Operations content; in
+#            Management only the four relevance weights change.
 # 0.8.0  - DRAFT FOR REVIEW. Added Operations relevance (Resilience,
 #            Automation, Interoperability, Monitoring and Auditing) and
 #            three requirement overlays (business-continuity 2.0,
@@ -71,7 +96,7 @@ schemaVersion: 1.0.0
 extension:
   id: pqc
   name: PQC Readiness Extension
-  version: 0.8.0
+  version: 0.9.0
   description: Extends the assessment model with post-quantum cryptography (PQC) readiness criteria, maturity guidance, and PQC-specific requirement weight overlays to evaluate strategic, policy, compliance, and operational preparedness for quantum-safe PKI transition.
   documentation: https://pkic.org/wg/pkimm/extensions/pqc/
   compatibility:
@@ -305,6 +330,81 @@ references:
   regions: ["GLOBAL"]
   url: https://www.rfc-editor.org/rfc/rfc9935.html
   # STATUS: Standards Track, March 2026. Added in 0.8.0.
+- id: nist-sp-1326
+  title: "NIST SP 1326: NIST Cybersecurity Supply Chain Risk Management - Due Diligence Assessment Quick-Start Guide"
+  authority: NIST
+  regions: ["US"]
+  url: https://csrc.nist.gov/pubs/sp/1326/final
+  # STATUS: Final, 8 July 2026 (initial public draft 30 October 2024).
+  # Added in 0.9.0.
+- id: nist-sp-800-161
+  title: "NIST SP 800-161 Rev. 1: Cybersecurity Supply Chain Risk Management Practices for Systems and Organizations"
+  authority: NIST
+  regions: ["US"]
+  url: https://csrc.nist.gov/pubs/sp/800/161/r1/upd1/final
+  # STATUS: Final, May 2022; the current edition includes updates as of
+  # 1 November 2024. Parent guidance for SP 1326. Added in 0.9.0.
+- id: uk-ncsc-pqc-workshop-report
+  title: "Post-quantum cryptography (PQC) migration workshop report"
+  authority: UK NCSC
+  regions: ["GB"]
+  url: https://www.ncsc.gov.uk/blogs/post-quantum-cryptography-pqc-migration-workshop-report
+  # STATUS: Published 22 July 2026. Report of a government and industry
+  # workshop. Added in 0.9.0.
+- id: uk-ncsc-acsc-pqc-pilot
+  title: "Assured Cyber Security Consultancy scheme: Post-quantum cryptography (PQC) pilot"
+  authority: UK NCSC
+  regions: ["GB"]
+  url: https://www.ncsc.gov.uk/schemes/assured-cyber-security-consultancy/pqc-pilot
+  # STATUS: Pilot scheme, expected to run to 31 March 2027. Added in 0.9.0.
+- id: eu-nis-cg-pqc-roadmap
+  title: "A Coordinated Implementation Roadmap for the Transition to Post-Quantum Cryptography"
+  authority: NIS Cooperation Group (EU Member States, supported by the European Commission)
+  regions: ["EU"]
+  url: https://digital-strategy.ec.europa.eu/en/library/coordinated-implementation-roadmap-transition-post-quantum-cryptography
+  # STATUS: Published 23 June 2025. Milestones are addressed to Member
+  # States; they are not corporate deadlines. Added in 0.9.0.
+- id: eu-dora-2022-2554
+  title: "Regulation (EU) 2022/2554 on digital operational resilience for the financial sector (DORA)"
+  authority: European Parliament and Council of the European Union
+  regions: ["EU"]
+  url: https://eur-lex.europa.eu/eli/reg/2022/2554/oj
+  # STATUS: Applies from 17 January 2025. ICT third-party risk and
+  # contractual requirements for financial entities; not a PQC migration
+  # date. Added in 0.9.0.
+- id: eu-dora-rts-2024-1774
+  title: "Commission Delegated Regulation (EU) 2024/1774: regulatory technical standards on the ICT risk management framework under DORA"
+  authority: European Commission
+  regions: ["EU"]
+  url: https://eur-lex.europa.eu/eli/reg_del/2024/1774/oj
+  # STATUS: In force. Recital 9 refers to threats from quantum
+  # advancements; Article 6 sets risk-based cryptographic policy
+  # obligations. Added in 0.9.0.
+- id: europol-qsff-pqc-report
+  title: "Prioritising Post-Quantum Cryptography Migration Activities in Financial Services"
+  authority: Europol Quantum Safe Financial Forum, with FS-ISAC and the Canadian Forum for Digital Infrastructure Resilience
+  regions: ["GLOBAL"]
+  url: https://www.europol.europa.eu/cms/sites/default/files/documents/Post-quantum-cryptography-report.pdf
+  # STATUS: Published 21 January 2026. Prioritization framework for
+  # financial institutions; not a regulatory requirement. Added in 0.9.0.
+- id: cabf-smc013-pqc-smime
+  title: "CA/Browser Forum Ballot SMC013: Enable PQC Algorithms for S/MIME"
+  authority: CA/Browser Forum
+  regions: ["GLOBAL"]
+  url: https://cabforum.org/2025/07/02/ballot-smc-013/
+  # STATUS: Adopted 22 August 2025. Covers S/MIME only; as checked in
+  # November 2026, no ballot permitting ML-DSA in publicly trusted TLS
+  # certificates had been adopted. Cited as an example of an ecosystem
+  # dependency that no supplier can commit on. Added in 0.9.0.
+- id: pkic-pqcmm
+  title: "PQC Maturity Model (PQCMM)"
+  authority: PKI Consortium PQC Working Group
+  regions: ["GLOBAL"]
+  url: https://pkic.org/wg/pqc/pqcmm/
+  # STATUS: First released 8 May 2026. Assesses the PQC capability of
+  # products and services. This extension scores how the organization
+  # manages its dependency on a product, not the product itself.
+  # Added in 0.9.0.
 
 relevance:
   modules:
@@ -739,12 +839,13 @@ relevance:
           - Lessons from those changes flow back into the decision register, the inventory, and deprecation planning
           - Standards still in development (e.g., HQC, FN-DSA) are tracked with their evaluation status and defined decision points, with controls that prevent premature production use
           - Approved cryptographic positions are visibly used: referenced in architecture reviews, procurement criteria, and product baselines
-  # Management (Module 2). Relevance weights as stated in the Module 2 document;
-  # PROVISIONAL pending the extension-wide relevance-weight rule (see change log).
+  # Management (Module 2). Relevance weights follow the proposed parity rule: each weight equals
+  # the category's post-overlay requirement weight sum, rounded half up (13, 24.5 becomes 25, 17
+  # and 20). PROVISIONAL until the Working Group confirms the rule (see change log).
   - id: M
     categories:
     - id: key-management
-      weight: 5
+      weight: 13
       guidance: |
         Key management is where the operational reality of post-quantum cryptography first becomes concrete. The transition introduces new key types with different semantics, new key formats whose handling is not yet uniform across implementations, hardware-module dependencies that frequently gate the entire migration, and at least one signing scheme whose state management can fail catastrophically if mishandled. None of these are matters of policy; all are matters of whether the organization can generate, protect, recover, and retire post-quantum key material under auditable control.
         Two clarifications bound the category. First, cipher-suite governance, the question of which algorithms are approved, is not assessed here; it has moved to the Governance Cryptography category. Key Management consumes that decision and is assessed on whether it can operate the approved material. Second, this category does not evaluate the cryptographic correctness of key-generation implementations. It evaluates whether the program has obtained and operationally accepted credible evidence of that correctness, in keeping with the boundary of assurance.
@@ -822,7 +923,7 @@ relevance:
           - Where stateful hash-based signing is in scope, one-time-key reuse prevention is enforced by the cryptographic module, which persists the advanced signing state before a signature is released or another signing request is accepted, and state is continuously monitored with exhaustion thresholds and tested recovery. Key-generation ceremonies, the distribution of signing capacity across modules where used, and recovery remain under approved, audited control, and no recovery path returns a key to an earlier signing state.
           - Where key material is generated in, imported into, or held in a provider-operated service, lifecycle operation is evidenced through service operation records and the provider's maintained assurance, and capacity and headroom through the service's own measures, such as telemetry, quotas, rate limits, or contractual capacity limits, rather than direct module instrumentation. Where stateful hash-based signing is provider-operated, that assurance remains specific to state persistence, reuse prevention, exhaustion, and recovery.
     - id: certificate-management
-      weight: 5
+      weight: 25
       guidance: |
         Issuing a post-quantum or hybrid certificate is the straightforward part of certificate management. The difficulty, and the place where transitions most often fail in production, lies outside the certificate authority: in whether relying parties can build and validate the new chains, whether enrollment protocols accept the larger and structurally different objects, whether revocation infrastructure scales to post-quantum signature sizes, and whether trust anchors and intermediates can be rolled over without breaking the population that depends on them. This category therefore extends beyond issuance to the validation ecosystem on which issuance depends.
         The extension of scope beyond issuance is the most significant development of this category relative to the original outline, and it is deliberate. A maturity model that assessed only the issuing side would over-credit programs that can mint a post-quantum certificate but cannot operate it, and would miss the relying-party and protocol failures that dominate real migrations.
@@ -900,7 +1001,7 @@ relevance:
           - Trust-anchor and intermediate transition is a rehearsed, controlled capability with tested rollback; it is not automated where assurance depends on controlled ceremony.
           - Where long-lived signatures are in scope, sustained verifiability is operated and monitored.
     - id: infrastructure-management
-      weight: 4
+      weight: 17
       guidance: |
         Post-quantum failure often occurs in libraries, appliances, firmware, network paths, and observability before it occurs in the certificate authority. Infrastructure management is where the larger objects and different performance characteristics of post-quantum cryptography meet the systems that must carry them, and where the dependency on vendor firmware and validated modules is most likely to gate the entire migration. The category assesses whether the supporting infrastructure can carry post-quantum cryptography, observe it, and reveal when it silently fails.
         Consistent with the boundary of assurance, this category does not evaluate the internal correctness of cryptographic libraries or appliances. It evaluates whether the program has obtained capability and validation evidence for them, has tested their behavior under representative conditions, and can detect failure and fallback in operation.
@@ -971,7 +1072,7 @@ relevance:
           - Negotiated-mechanism and fallback telemetry is continuous, and silent classical fallback is detected and acted upon.
           - Infrastructure post-quantum readiness, including third-party and managed services, is maintained against change and re-evidenced as components and firmware evolve.
     - id: change-management-and-agility
-      weight: 5
+      weight: 20
       guidance: |
         Change Management and Agility is where a quantum-safe transition is shown to be executable rather than merely intended, and it is the category most central to the extension's purpose. The Governance module establishes which algorithms are approved and who may approve cryptographic change; this category assesses whether the organization can carry an algorithm or certificate-profile change through to production safely, observe it, and reverse it or recover to an approved state, across the systems that depend on the cryptography, including those it does not directly control.
         Cryptographic agility in the post-quantum context is not the ability to change quickly. It is the ability to change in a controlled, sequenced, and reversible way. The standardization landscape makes this concrete: the signature and key-establishment portfolio is still expanding, with ML-KEM, ML-DSA, and SLH-DSA final, HQC selected as a code-based key-encapsulation backup on a different mathematical basis, and a further lattice signature in standardization; an agile organization must be able to adopt a newly standardized or replacement algorithm without re-architecting. NIST CSWP 39upd1 frames agility as the governing capability for exactly this kind of transition, and the deprecation timeline in NIST IR 8547 makes the transition a sequencing problem rather than a single event.
@@ -1318,6 +1419,262 @@ relevance:
           - Fallback and compatibility exception populations are measured against their approved scope and exit conditions, and retirement is verified when those paths are removed.
           - Operational coverage and known visibility gaps are reported by relevant exposure or service class, and material telemetry gaps trigger remediation rather than silent loss of assurance.
           - Audit and monitoring evidence remains sufficient for required investigation and assurance purposes, while retention and granularity are proportionate to risk rather than universally maximized.
+  # Resources (Module 4, Working Draft 0.2). Relevance weights follow the proposed parity rule:
+  # each weight equals the category's post-overlay requirement weight sum, rounded half up
+  # (17, 9 and 7). PROVISIONAL until the Working Group confirms the rule.
+  - id: R
+    categories:
+    - id: sourcing
+      weight: 17
+      guidance: |
+        Sourcing is where a PQC transition can stall for reasons outside the organization's control. The plan is approved and the engineers are ready, and the hardware security module (HSM) firmware that would let the root key be generated with the new algorithm is on a supplier roadmap dated after the plan's window; or the only compliant supplier in a procurement framework delivers too late; or the whole estate sits on one cloud provider that publishes roadmaps and signs no commitments. The base Sourcing controls still describe the right activity: identify what is needed, define it, make it available, review it. PQC changes the content of all four, and for availability it adds a blocking dependency on parties the organization cannot direct.
+        Management records the technical dependency map of the migration and the systems that cannot move on time. Sourcing scores what each supplier has committed to for each wave, what covers the gap, and whether the funding and people for the wave are in place.
+
+        Hazards specific to PQC:
+          - Product availability varies by category and moves. The product-categories list published by the Cybersecurity and Infrastructure Security Agency (CISA) in January 2026 places PKI and certification authorities, identity and access management, and networking in its transitioning tier.
+          - Validation and certification lag standardization. "Supports the algorithm" and "holds a validated module implementing it" are different claims with different dates.
+          - Procurement cycles, outsourcing contracts and hardware refresh cycles can run longer than the distance to the plan's first milestone.
+          - Capability statements are mistaken for commitments. A product self-assessment says what a product does today, not when a future release will ship.
+          - Internal shared-service providers are suppliers without contracts, often without a roadmap or an escalation path.
+          - Ecosystem dependencies cannot be contracted by anyone: root programs, scheme specifications, supervisory processes and standards bodies set dates that no supplier can commit to.
+          - Funding is allocated to the program and then not appropriated for the wave, and the plan does not change.
+
+        Terms: Capability evidence states what a product or service can do now, such as a self-assessment under the PKI Consortium PQC Maturity Model (PQCMM) or a validation certificate; it does not show when a future capability will be delivered. Commitment evidence states what a supplier will deliver and by when, in four classes: (a) a bilateral, dated, written commitment with a consequence for slippage; (b) a published, dated statement by the supplier or the authority concerned, naming the deliverable and an anticipated date; (c) documentation or general terms that imply future support without a date; (d) none. A dependency is critical when its absence on the date it is needed would prevent a wave from meeting the date in the organization's approved plan. It is treated when a recorded action removes or reduces the risk, such as an alternative supplier or a tested fallback. It is accepted when the residual risk is formally taken by the role the organization has designated to accept transition risk. A comparable earlier transition is a cryptographic transition completed within the last fifteen years that exercised the same mechanism, such as the SHA-1 to SHA-2 migration. A wave is an ordered group of systems, services or certificate populations that the approved transition plan moves together; where a plan sequences its work without waves, wave is read as the plan's own unit of sequencing.
+      assessment: |
+        Key Probes:
+          - For the next migration wave, which resources does the plan need across people, products and services, funding and external dependencies, and where is that record?
+          - For each critical external dependency, what did you ask the supplier for, through which channel, what did you get, and what covers the gap?
+          - Which dependencies are ecosystem dependencies that no supplier can commit on, and what event would change your plan?
+          - Who confirms that the wave is funded, how often, and what happened the last time an appropriation was cut or delayed?
+          - When did a resource constraint last force a decision, and what changed in the plan as a result?
+          - Is any dependency known to miss the date a wave needs it, and if so, what did you change?
+
+        Warning Signs:
+          - The resource plan is a headcount and a budget figure, with no mapping to waves, dates or dependencies.
+          - Supplier readiness is recorded from marketing material or product self-assessments, with no record of what was asked.
+          - Every supplier is recorded as "committed", or every supplier as "unknown".
+          - The dependency list stops at first-tier suppliers and contains no internal provider or ecosystem dependency.
+          - The allocated multi-year budget is cited as evidence that the wave is funded.
+          - No constraint has ever been escalated, and that is read as a sign of health.
+
+        Evidence:
+          - The highest feasible commitment class is shown by a request proportionate to the dependency, made through the supplier's commercial or account channel, the answer received, and the reason a higher class was unavailable. Class (b) is normally the ceiling for a cloud or managed service; informal correspondence with an internal provider is class (c) at best. For an ecosystem dependency no request is possible, and the class is that of the authority's published position under the same definitions, or (d) where nothing is published.
+          - An acceptance is shown by the accepting role's own record, the plan date at risk, the mitigation applied and the review triggers.
+          - A deliberately tested constraint counts where someone other than the plan's owner chose it, the person who would decide in a real case took the decision, and the test could have failed.
+          - For a comparable earlier transition, the organization records what was exercised, the outcome, its age, and how the PQC-specific differences are covered. Estimates are not actuals.
+          - No event in period: where no acquisition, renewal or supplier change occurred in the last twelve months, the organization shows that from its acquisition register or supplier notices.
+      references:
+      - nist-ir-8547
+      - nist-sp-1326
+      - nist-sp-800-161
+      - nist-cswp-39
+      - cisa-pqc-product-categories-2026
+      - uk-ncsc-pqc-migration
+      - uk-ncsc-pqc-workshop-report
+      - eu-nis-cg-pqc-roadmap
+      - eu-dora-2022-2554
+      - eu-dora-rts-2024-1774
+      - europol-qsff-pqc-report
+      - cccs-itsm-40-001
+      - cabf-smc013-pqc-smime
+      - pkic-pqcmm
+      levels:
+      - number: 1
+        name: Initial
+        description: |
+          - No record exists of what the PQC transition requires beyond the resources that run the current PKI.
+          - Supplier PQC readiness is unknown, or assumed from marketing claims.
+          - Dependencies are discovered when they fail.
+      - number: 2
+        name: Foundational
+        description: |
+          - Needs for people, products, services and funding are recognized and written down in general terms, without allocation to waves, dates or owners.
+          - A first list of suppliers and internal providers with PQC relevance exists, and inquiries have been made to the most critical of them.
+          - Lead times and contingencies, where recorded, are recorded for single items and not per wave.
+      - number: 3
+        name: Advanced
+        description: |
+          - An approved transition plan exists, with an approval record identifying its scope, sequenced waves and approving authority, and resource needs are recorded against it.
+          - For each wave, a resource record states the capacity or capability required across people, including the draw on those who run the current PKI, external supply and funding, with the date needed, owner, lead time and contingency.
+          - A dependency register per wave covers suppliers, internal providers and ecosystem dependencies, with sub-tier dependencies for critical components or the record that the provider does not disclose them; each critical dependency records the request made and the commitment class of the answer, or, for an ecosystem dependency, the authority's published position and its class, or the record that nothing is published.
+          - Acquisitions in scope are checked against the organization's approved PQC requirements, and the check is recorded.
+          - Contract renewal, refresh and framework expiry dates are mapped against the plan's migration windows, and resource reviews have defined PQC triggers.
+      - number: 4
+        name: Managed
+        description: |
+          - The resource record is executed against for the current wave, or the next wave where none has started: people are assigned to wave roles, procurement is tracked against the recorded lead times, and funding is confirmed at a defined cadence, with any shortfall escalated.
+          - For each critical external dependency the organization holds the highest commitment class it could feasibly obtain, and the remaining gap is treated or accepted.
+          - Where a dependency is known to miss the date a wave needs it and no treatment keeps the wave on its date, the plan has been changed: the wave is re-sequenced, or the date is re-set by the plan's approving authority. It is not left accepted against an unchanged plan.
+          - At least one resource constraint, real, deliberately tested, or handled in a comparable earlier transition, has been carried through escalation to a decision that changed or confirmed the plan.
+          - Dependencies are monitored on the defined triggers, and the changes made as a result are recorded.
+      - number: 5
+        name: Optimized
+        description: |
+          - Resource management for the transition is normal practice, evidenced over at least one year that includes a formal re-approval of the resource record.
+          - Actual cost, lead time, slippage and supplier performance feed the plans for later waves; where no PQC wave has completed, actuals from a comparable earlier transition are used with the differences recorded.
+          - The dependency register is regenerated at each plan review, and accepted dependencies are re-accepted or treated.
+          - Renewal and refresh calendars are managed against the plan, so that a contract extending quantum-vulnerable-only capability beyond its planned window is a recorded, accepted exception.
+    - id: knowledge-and-training
+      weight: 9
+      guidance: |
+        Post-quantum cryptography is new to most of the people who will work with it. In a classical PKI a training record is usually taken as a proxy for competence, because the people being trained have done the work before and the content is settled. In a PQC transition neither holds: the content is being written while the standards still move, the people who can write it are the specialists who have to execute the migration, and a completed curriculum does not show that an engineer can run a key ceremony with a new algorithm or recognize a downgrade to classical cryptography. The Relevance criteria therefore assess demonstrated ability for the roles whose errors could block a wave, and how many people have demonstrated each critical task.
+        Capacity is scored in Sourcing. Whether competence is maintained when people rotate or leave is the base Operations control competence-sharing; this category scores only how many people have demonstrated the PQC tasks of the transition.
+
+        Hazards specific to PQC:
+          - Completion is tracked more reliably than ability.
+          - Role-specific content does not yet exist, and the people who could write it are busy with the migration.
+          - One person, or an integrator, has performed every critical task: the organization has bought delivery without owning the ability to judge it.
+          - Standards and protocol details change, and training written in one year misleads in the next.
+          - The wrong people are trained: knowledge concentrates in the PKI team while errors occur in development, procurement and the service desk.
+          - Contractors perform critical tasks and are assumed competent because the contract says so.
+
+        Terms: A blocking role is a role whose incorrect execution could block or damage a wave. A critical PQC task is a task of a blocking role that a wave cannot proceed without, such as a key ceremony with a new algorithm. Proficiency evidence is a recorded pass of the task defined for a blocking role, against pass and fail criteria defined in advance; attendance, completion and participation are not proficiency evidence. A gap or a single performer is accepted when the residual risk is formally taken by the role the organization has designated to accept transition risk. A comparable earlier transition is a cryptographic transition completed within the last fifteen years in which a role was brought to demonstrated competence on a new mechanism. A wave is an ordered group of systems, services or certificate populations that the approved transition plan moves together; where a plan sequences its work without waves, wave is read as the plan's own unit of sequencing.
+      assessment: |
+        Key Probes:
+          - Which roles are involved in the next wave, what must each be able to do that it could not do before, and which did you classify as blocking?
+          - For the blocking roles, what task did each person perform, against what pass criterion, observed by whom, with what outcome?
+          - How many people have demonstrated each critical PQC task, and where only one has, what covers that?
+          - Who inside the organization can judge work delivered by a contractor or provider?
+          - What changed in your training content after the last rehearsal, incident or standards change?
+
+        Warning Signs:
+          - The training plan contains one PQC module for all staff and nothing role-specific.
+          - Completion percentages or rehearsal attendance lists are reported as competence.
+          - The blocking-role list contains no operator, integrator or developer.
+          - A rehearsal or production change failed on a task a trained person performed, and nothing changed afterwards.
+          - All PQC training came from one product vendor.
+
+        Evidence:
+          - Proficiency evidence is observed by someone independent of the performer or captured in logs. For roles that perform key ceremonies or implement PQC mechanisms, the task includes a failure or downgrade check.
+          - A sole specialist is assessed through an external route: peer review, audit observation or an external assessor. This route and the accepted single performer are the expected Level 4 routes for small operators.
+          - For outsourced personnel, task-outcome records without names are acceptable where the provider attests each performer's role and that the performers counted are different people.
+          - No event in period: where no rehearsal failure or incident occurred in the last twelve months, the organization shows that from its rehearsal and incident records.
+      references:
+      - nist-sp-800-50
+      - ecsf
+      - uk-ncsc-pqc-workshop-report
+      - uk-ncsc-acsc-pqc-pilot
+      - nist-cswp-39
+      - nist-fips-203
+      - nist-fips-204
+      - nist-fips-205
+      - nist-ir-8547
+      - cccs-itsm-40-001
+      levels:
+      - number: 1
+        name: Initial
+        description: |
+          - Training and education plans contain no post-quantum content.
+          - The organization cannot show that the people responsible for the transition understand the mechanisms it depends on.
+          - No PQC task has been performed by anyone under observation.
+      - number: 2
+        name: Foundational
+        description: |
+          - General PQC awareness sessions have been held and PQC topics added to the training plan, without mapping to roles or waves.
+          - Completion is tracked; the ability to perform the work is not.
+          - Some individuals have acquired PQC knowledge on their own, recorded without a role structure.
+      - number: 3
+        name: Advanced
+        description: |
+          - An approved transition plan exists, with an approval record identifying its scope, sequenced waves and approving authority, and a role-competence map written against it names the roles involved in each wave, the competence each needs and by when.
+          - The map identifies the blocking roles, including the internal roles that accept delivered PQC work and approve the plan's technical assumptions; for each, the task and its pass and fail criteria are defined in advance.
+          - The training plan carries role-specific PQC content on a schedule aligned to the waves, and the education plan names the external sources for competence that cannot yet be built internally.
+          - For each critical PQC task the map records how many people are expected to demonstrate it and what covers a single performer.
+          - Contractors and outsourced personnel performing in-scope tasks are included in the map and held to the same evidence standard.
+          - Security awareness content covers the PQC threats relevant to the organization.
+      - number: 4
+        name: Managed
+        description: |
+          - Proficiency has been demonstrated and recorded for every blocking role in the completed and current waves, or the next wave where none has started, by task outcome against the defined criteria; for the internal accepting roles, the next criterion states the alternative.
+          - The internal roles that accept delivered PQC work and approve the plan's assumptions have demonstrated the ability to evaluate that work; where no internal role has, a recorded review of the delivered work, independent of the party that delivered it, takes the place of that demonstration.
+          - Each critical PQC task in those waves, other than the evaluation covered by the previous criterion, has at least two demonstrated performers, or a single performer recorded as a concentration with demonstrated cover and formal acceptance.
+          - Every rehearsal or production failure attributable to a trained role has a recorded competence action: a content change, a re-assessment, a reassignment or an accepted gap.
+          - Training content and the competence map are reviewed on defined triggers and after rehearsals and incidents.
+      - number: 5
+        name: Optimized
+        description: |
+          - Competence management for the transition is normal practice, evidenced over at least one year that includes a formal re-approval of the competence map.
+          - Competence is measured by outcome, such as task performance by role and incidents attributed to knowledge gaps, and the results confirm or change the content and the map.
+          - Every critical PQC task counted at Level 4 keeps at least two demonstrated performers, or a single performer whose acceptance has been renewed and whose cover has been demonstrated again.
+          - Lessons from completed waves, or from a comparable earlier transition where no PQC wave has completed, change the content for later waves.
+    - id: awareness
+      weight: 7
+      guidance: |
+        A PQC transition changes what a PKI must tell its participants, and the base Awareness controls already govern how that telling happens: an awareness plan, disclosure, a single point of contact, timely communication. Relying parties who are not told that a trust anchor will change, that a hybrid chain will appear, or that a test hierarchy is available before rollover learn about it from production failures. The Relevance criteria assess whether the affected participants, including relying parties who never enrolled, were told in time and acted.
+        This category discloses and communicates decisions. It does not approve their content, which is Governance, or test compatibility, which is Management and Operations. An organization that consumes certificates has the same duty in a different shape: to map which of its participants are affected by its provider's changes and to relay them onward.
+
+        Hazards specific to PQC:
+          - Relying parties learn from failures: the first notice the operator receives is the incident ticket.
+          - Trust-anchor distribution can take years and runs on timelines the operator does not control.
+          - The participant map is the subscriber list; machine consumers, partner systems and devices in the field are not on it.
+          - An announced date moves and the participants who planned against it are not told.
+          - A Certificate Policy (CP) or Certification Practice Statement (CPS) is republished with PQC provisions and nobody tells the parties who rely on the old text.
+          - A certificate-consuming organization assumes its provider's announcement reached its own partners and devices.
+
+        Terms: Participants are the subscribers, relying parties and other parties that depend on the assessed PKI, including relying parties that never enrolled. A transition event is a change those participants must prepare for: a new algorithm or chain, a trust-anchor rollover, a deprecation date, a material change to the CP or CPS. A comparable earlier transition is a cryptographic transition completed within the last fifteen years in which participants were notified ahead of a trust or algorithm change. A wave is an ordered group of systems, services or certificate populations that the approved transition plan moves together; where a plan sequences its work without waves, wave is read as the plan's own unit of sequencing.
+      assessment: |
+        Key Probes:
+          - Who are the participants of the assessed PKI for the transition, including relying parties who never enrolled?
+          - For the next transition event, what will each participant class be told, through which channel, how far in advance, and who owns it?
+          - When your CP or CPS last changed materially, who was told, and how do you know they acted?
+          - When a participant asks the single point of contact a PQC question, where does it go and how quickly is it answered?
+          - When an announced date last moved, who was told?
+
+        Warning Signs:
+          - The participant list is the subscriber list.
+          - No transition page or timeline exists for relying parties, or it is out of date against the plan.
+          - Relying-party failures followed a trust change that no communication preceded.
+          - Communications are sent and not tracked.
+          - A certificate-consuming organization holds its provider's announcement and has no record of relaying it.
+
+        Evidence:
+          - A deliberately tested communication counts where someone other than the plan's owner selected the population and a participant action is evidenced. Acknowledgments from selected friendly participants do not count.
+          - For a certificate-consuming organization, the provider's announced changes are the transition events. Where no test endpoint or CP and CPS exist in scope, the plan records what participants are told instead.
+          - Participant classes that cannot be reached, such as the downstream device users of a software vendor, are recorded as such with the reason; the criteria are assessed on the classes that can be reached.
+          - No event in period: where no transition event, material CP or CPS change or date change occurred in the last twelve months, the organization shows that from its change calendar and its provider's notices.
+      references:
+      - rfc-3647
+      - etsi-319-401
+      - cabf-smc013-pqc-smime
+      - nist-ir-8547
+      - eu-nis-cg-pqc-roadmap
+      - uk-ncsc-pqc-migration
+      levels:
+      - number: 1
+        name: Initial
+        description: |
+          - No participant communication mentions post-quantum algorithms, trust-anchor changes or transition dates.
+          - Participants learn of changes from failures or from third parties.
+          - No participant map exists beyond the subscriber list.
+      - number: 2
+        name: Foundational
+        description: |
+          - Ad hoc notices or a page mention post-quantum plans, without mapping to audiences, events or dates.
+          - Where disclosure documents changed, participants were not told.
+          - PQC questions reaching the single point of contact are handled case by case.
+      - number: 3
+        name: Advanced
+        description: |
+          - An approved transition plan exists, with an approval record identifying its scope, sequenced waves and approving authority, and a participant map written against it covers subscribers, relying-party classes that never enrolled, internal consumers, and auditors and regulators where they apply, with the channel and lead time for each.
+          - The awareness plan lists the transition events that require communication, with trigger, lead time, owner and participant classes; for a certificate-consuming organization the events are its provider's announced changes and the plan records how they are relayed.
+          - The plan states what participants are told about material CP or CPS changes and about test hierarchies or test certificates available before rollover, and records the substitute where no such artifact exists.
+          - A routing rule names who answers PQC questions at the single point of contact and within what time.
+      - number: 4
+        name: Managed
+        description: |
+          - The participant map and the awareness plan are current, with a review in the last twelve months.
+          - Where transition events, material CP or CPS changes or date changes have occurred, the affected participant classes were notified with the planned lead time, including where they could test before a rollover, or the substitute recorded in the plan where no test artifact exists.
+          - For each affected class that can be reached, evidence shows that the communication was received and, where it asked for an action, that the action was taken: acknowledgments show receipt; completed updates, relying-party test results, or sampled testing for classes that cannot be enumerated, show action.
+          - At least one transition event, real, deliberately tested, or from a comparable earlier transition, has been communicated end to end to a representative population, with a participant action evidenced.
+          - The single point of contact answers PQC questions within the defined time, shown by records or by a timed test.
+      - number: 5
+        name: Optimized
+        description: |
+          - Transition communication is normal practice, evidenced over at least one year that includes a formal re-approval of the awareness plan.
+          - Communication effectiveness is measured by participant class, and the results confirm or change the plan.
+          - Communication lead times are set from how long earlier trust-anchor or algorithm changes took to reach participants.
+          - Lessons from completed waves, or from a comparable earlier transition where no PQC wave has completed, change later communication.
+
 overlays:
   # OVERLAY STACKING (design note, addresses community feedback on Q5):
   # Overlays are applied per requirement. Where more than one overlay
@@ -1536,3 +1893,15 @@ overlays:
         multiplier: 2.5
         rationale: |
           PQC creates a distinct operational failure mode in which the service continues to operate successfully while the cryptographic protection has silently regressed or fallen outside the approved transition state. Monitoring must therefore observe cryptographic state itself rather than infer it from service health.
+  # Resources overlay. One requirement overlay, proposed under the overlay doctrine in the
+  # Module 4 source document; no overlay on the Knowledge and Training or Awareness
+  # requirements. PROVISIONAL.
+  - id: R
+    categories:
+    - id: sourcing
+      requirements:
+      - id: resource-availability
+        type: multiplier
+        multiplier: 1.5
+        rationale: |
+          PQC introduces a blocking sequencing dependency that lands on this requirement: supply the organization does not control must be available on dates fixed in its own transition plan. The control itself, ensuring that resources are available at the required capacity when needed, is the same activity. The overlay raises the weight from 4 to 6, which makes availability the heaviest Sourcing requirement.
