@@ -15,21 +15,20 @@ The quantum threat fundamentally changes what PKI maturity means. An organizatio
 This extension is **under development**. It is authored and maintained by Kennedy Nwup (Afield AB), Vice Chair of the PKIMM Working Group.
 
 - **Complete** — Governance module (strategy and vision, policies and documentation, compliance, processes and procedures, and cryptography): full Level 1–5 criteria, assessor guidance, evidence examples, overlay weights, and 25 status-labelled regulatory and standards references listed per category for display in the assessment application. Includes persona coverage for software vendors and certificate-consuming organizations (v0.4.0) and reworked segregation-of-duties criteria (v0.3.0).
-- **Draft for review** — Management module (key management, certificate management, infrastructure management, change management and agility) and Operations module (resilience, automation, interoperability, monitoring and auditing): full Level 1–5 criteria, assessor guidance, and proposed requirement overlays, converted from the Module 2 and Module 3 source documents now in working group review. The content of these two modules is not yet endorsed.
-- **In development** — Resources module: source content in drafting; PQC-critical considerations identified at outline level below.
-- **YAML version** — `0.8.0` (draft). The extension version will move to `1.0.0` when all modules reach full Level 1–5 development and the working group endorses the content.
+- **Draft for review** — Management module (key management, certificate management, infrastructure management, change management and agility), Operations module (resilience, automation, interoperability, monitoring and auditing), and Resources module (sourcing, knowledge and training, awareness): full Level 1–5 criteria, assessor guidance, and proposed requirement overlays, converted from the Module 2, Module 3, and Module 4 source documents now in working group review. The content of these three modules is not yet endorsed.
+- **YAML version** — `0.9.0` (draft). The extension version will move to `1.0.0` when all modules reach full Level 1–5 development and the working group endorses the content.
 
 ### Open review items
 
-The following points are open and will be settled across the whole extension once the Resources module is added. Comments are welcome. Until then, scores produced with this draft are provisional: they should not be treated as final or compared with later versions, and the Resources categories contribute their baseline levels only, because they have no PQC criteria yet.
+The following points are open and will be settled across the whole extension in a final consistency pass before version `1.0.0`. Comments are welcome. Until then, scores produced with this draft are provisional: they should not be treated as final or compared with later versions.
 
-- **Relevance weights.** Governance uses a relevance weight of 5 in every category and Management uses 5, 5, 4 and 5. Operations sets each relevance weight to the category's requirement weight sum after overlays, rounded to a whole number as the schema requires (30, 5, 10 and 31), so that the PQC criteria carry about half of the extension category level in every category. The two approaches give the PQC criteria a different influence. Which rule applies is a working group decision, to be made once and applied consistently.
-- **Overlay multipliers.** The multipliers for Management and Operations are provisional and will be reviewed as a set with the Governance overlays.
-- **Evidence shared across overlays.** Where one piece of evidence can support several overlaid requirements, the extension should not weight the same underlying capability more than once. The Operations source document sets a rule on evidence reuse and claim separation; the same check is open for the Management overlays.
+- **Relevance weights.** The rule proposed for the whole extension is that each relevance weight equals the category's requirement weight sum after overlays, rounded half up, so that the PQC criteria carry about half of the extension category level in every category. The schema requires whole-number weights; where a sum ends in a half, rounding lifts the PQC share slightly above half, by about 0.75 of a percentage point at most on the current overlays. Operations (30, 5, 10 and 31), Resources (17, 9 and 7) and Management (13, 25, 17 and 20, previously 5, 5, 4 and 5) follow the rule in this draft, and the validator enforces it for those three modules. Governance still uses a relevance weight of 5 in every category. Its published weights move in the final consistency pass, together with the review of the Governance overlays, so that published scores change once; on the current overlays the rule gives Governance 17, 35, 22, 27 and 46. One example shows the effect: an organization at baseline Level 4 in Governance Cryptography with a PQC relevance level of 1 has an extension category level of 3.71 under the current weight and 2.5 under the rule. The rule is a proposal for working group confirmation.
+- **Overlay multipliers.** The multipliers for Management, Operations, and Resources are provisional. The Module 4 source document proposes one overlay doctrine for all four modules: an overlay is proposed only where PQC changes the nature of a control, requires a new auditable mechanism, introduces a blocking sequencing dependency, or changes the operational control itself. The existing Governance, Management, and Operations overlays will be reviewed against it as a set in the final consistency pass. Published Governance content is not changed until then.
+- **Evidence reuse.** Where one piece of evidence can support several criteria or overlaid requirements, the extension should not weight the same underlying capability more than once. The Operations source document sets a rule on evidence reuse and claim separation. The Resources source document follows one rule: evidence produced for one module may be reused in another where it proves that module's criterion, reuse does not by itself satisfy the criterion, and the same property is not scored twice. A single rule will be stated once at extension level in the final consistency pass; the same check is open for the Management overlays.
 
 ### Overlay design
 
-Earlier drafts treated two overlay designs as competing candidates: Governance-centric overlays, per-requirement multipliers on the Governance categories, and capability-centric overlays on operational capabilities such as crypto-agility and PQC training (section 7 of the v1.3 proposal). Development since then has reconciled them by module rather than choosing between them. The Governance overlays are published in the current YAML. Overlays for the Management module, including change management and agility, and for the Operations module are included in the current YAML as drafts for review, and training-related overlays will follow with the Resources module. The working group reviews each module's overlays as part of that module's release.
+Earlier drafts treated two overlay designs as competing candidates: Governance-centric overlays, per-requirement multipliers on the Governance categories, and capability-centric overlays on operational capabilities such as crypto-agility and PQC training (section 7 of the v1.3 proposal). Development since then has reconciled them by module rather than choosing between them. The Governance overlays are published in the current YAML. Overlays for the Management module, including change management and agility, and for the Operations module are included in the current YAML as drafts for review. The Resources module proposes one overlay, on resource availability, and none on the training or awareness requirements. Earlier versions of this page said that training-related overlays would follow with the Resources module; the Module 4 source document sets out why none is proposed. The working group reviews each module's overlays as part of that module's release.
 
 The v2.0.0 model's Cryptography category is covered as of extension version 0.6.0, with a relevance entry and overlays on all six requirements.
 
@@ -45,7 +44,7 @@ Persona coverage for **certificate-consuming organizations** and **software vend
 
 ## What the extension covers
 
-The YAML covers the Governance module in full: strategy and vision, policies and documentation, compliance, processes and procedures, and cryptography each receive PQC-specific Level 1–5 criteria. The Management and Operations modules are included as drafts for review. Resources is identified at outline level.
+The YAML covers the Governance module in full: strategy and vision, policies and documentation, compliance, processes and procedures, and cryptography each receive PQC-specific Level 1–5 criteria. The Management, Operations, and Resources modules are included as drafts for review.
 
 ### Governance — Module G
 
@@ -109,15 +108,21 @@ Documented transition states for material integrations; a representative interop
 
 Observation of the cryptographic mechanisms in use for material services; detection of unexpected classical fallback, regression, and drift; and audit evidence sufficient to reconstruct the cryptographic state relevant to an incident.
 
-### Module R (outline only)
+### Resources — Module R (draft for review)
 
-The following PQC-critical considerations are identified for the remaining module. Full Level 1–5 development is pending.
+Resources assesses whether the organization manages the people, external supply, funding, and information flows that its PQC transition consumes, so that they are in place when its approved plan needs them. A maturity level in this module describes how that is managed; it is not a statement that a migration is feasible or that any deadline will be met.
 
-#### Resources — Module R (PQC people and sourcing considerations)
+#### Sourcing (R.sourcing)
 
-- **Sourcing (R.sourcing)** — vendor PQC roadmap assessment in procurement; contract requirements for PQC support timelines; third-party certificate provider PQC readiness; supply-chain security for cryptographic components.
-- **Knowledge and Training (R.knowledge-and-training)** — PQC technical training for PKI operations staff; executive education on quantum risk; certification programs incorporating PQC; knowledge transfer from PQC migration projects.
-- **Awareness (R.awareness)** — organization-wide quantum-threat awareness; developer education on PQC implications; stakeholder communication for migration activities.
+Resource needs recorded for each migration wave against the approved transition plan; a dependency register covering suppliers, internal providers, and ecosystem dependencies such as root programs and standards bodies; the commitment obtained from each critical dependency and what covers the gap; confirmation of funding for each wave; and a change to the plan where supply will miss the date a wave needs it.
+
+#### Knowledge and training (R.knowledge-and-training)
+
+A role-competence map written against the plan; proficiency demonstrated by task outcome for the roles whose errors could block a wave; the number of people who have demonstrated each critical PQC task, with accepted alternatives for small operators; and a recorded competence action after a rehearsal or production failure.
+
+#### Awareness (R.awareness)
+
+A participant map that includes relying parties who never enrolled; the transition events that require communication, with lead times and owners; evidence that the affected participants were told in time and acted; and, for certificate-consuming organizations, the onward relay of their provider's changes.
 
 ## Product and service dependency
 

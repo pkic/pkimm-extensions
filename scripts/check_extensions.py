@@ -5,7 +5,9 @@ from __future__ import annotations
 import argparse
 import dataclasses
 import json
+import math
 import sys
+from fractions import Fraction
 from pathlib import Path
 from typing import Any
 
@@ -14,6 +16,14 @@ from jsonschema import Draft202012Validator
 
 from scripts import pkimm_model as pm
 from scripts import generate_catalog_docs as gen
+
+# Extensions whose relevance weights follow the weight-sum rule: a category's relevance
+# weight equals the sum of its requirement weights after requirement overlays, rounded
+# half up, so that the relevance criteria carry about half of the extension category level.
+# The value is the set of modules not yet held to the rule.
+# pqc: Governance is exempt until its published weights and overlays are reviewed together
+# in the final consistency pass before 1.0.0.
+RELEVANCE_WEIGHT_SUM_RULE: dict[str, set[str]] = {"pqc": {"G"}}
 
 
 @dataclasses.dataclass
@@ -77,6 +87,8 @@ def check_all(repo_root: Path) -> list[Issue]:
                 r["id"] for r in ext.get("references", []) if isinstance(r, dict) and "id" in r}
             issues += _check_relevance(ext_id, ext, idx, ref_ids)
             issues += _check_overlays(ext_id, ext, idx)
+            if ext_id in RELEVANCE_WEIGHT_SUM_RULE:
+                issues += _check_relevance_weights(ext_id, ext, model, RELEVANCE_WEIGHT_SUM_RULE[ext_id])
 
     issues += _check_vendored_integrity(repo_root)
     issues += _check_generated_parity(repo_root, catalog)
@@ -116,6 +128,57 @@ def _check_overlays(ext_id, ext, idx) -> list[Issue]:
             for req in cat.get("requirements", []) or []:
                 if not idx.requirement_in_category(cid, req.get("id")):
                     out.append(Issue("error", f"{ext_id}: overlay requirement '{req.get('id')}' is not in category '{cid}'"))
+    return out
+
+
+def _effective_weight(base: Any, overlays: list[dict[str, Any]]) -> Fraction:
+    """Requirement weight after its overlays, applied in file order: multipliers compound,
+    an addition adjusts the weight, an override replaces it."""
+    def num(value: Any, default: Fraction) -> Fraction:
+        # A missing, non-numeric or non-finite value is not a usable weight. It is left to the
+        # schema check to report; here it must not stop the remaining checks from running.
+        if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
+            return default
+        return Fraction(str(value))
+
+    weight = num(base, Fraction(0))
+    for ov in overlays:
+        kind = ov.get("type")
+        if kind == "multiplier":
+            weight *= num(ov.get("multiplier"), Fraction(1))
+        elif kind == "addition":
+            weight += num(ov.get("addition"), Fraction(0))
+        elif kind == "override":
+            weight = num(ov.get("override"), weight)
+    return weight
+
+
+def _check_relevance_weights(ext_id, ext, model, exempt_modules) -> list[Issue]:
+    """Each relevance weight must equal the category's requirement weight sum after
+    requirement overlays (WeightSum_C in the scoring model), rounded half up."""
+    out: list[Issue] = []
+    base = {(m.get("id"), c.get("id")): c.get("requirements", [])
+            for m in model.get("modules", []) for c in m.get("categories", [])}
+    overlays: dict[tuple[str, str, str], list[dict[str, Any]]] = {}
+    for module in ext.get("overlays", {}).get("modules", []):
+        for cat in module.get("categories", []):
+            for req in cat.get("requirements", []) or []:
+                overlays.setdefault((module.get("id"), cat.get("id"), req.get("id")), []).append(req)
+    for module in ext.get("relevance", {}).get("modules", []):
+        mid = module.get("id")
+        if mid in exempt_modules:
+            continue
+        for cat in module.get("categories", []):
+            cid = cat.get("id")
+            if (mid, cid) not in base:
+                continue  # reported by _check_relevance
+            total = sum((_effective_weight(r.get("weight", 0), overlays.get((mid, cid, r.get("id")), []))
+                         for r in base[(mid, cid)]), Fraction(0))
+            expected = int((total + Fraction(1, 2)) // 1)
+            if cat.get("weight") != expected:
+                out.append(Issue("error",
+                                 f"{ext_id}: relevance weight of '{mid}.{cid}' is {cat.get('weight')}, expected {expected} "
+                                 f"(requirement weight sum after overlays is {float(total):g}, rounded half up)"))
     return out
 
 
